@@ -1,19 +1,42 @@
 package com.beehome.taskmanagerapi.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 
+@Entity
+@Table(name = "user", schema = "register")
 public class UserModel {
-    private UUID Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private UUID id;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
 
+    public UserModel() {
+    }
+
+    public UserModel(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public UUID getId() {
-        return Id;
+        return id;
     }
 
     public void setId(UUID id) {
-        Id = id;
+        id = id;
     }
 
     public String getUsername() {

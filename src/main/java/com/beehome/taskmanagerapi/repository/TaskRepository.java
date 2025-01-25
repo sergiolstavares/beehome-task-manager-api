@@ -17,6 +17,8 @@ import java.util.UUID;
 public interface TaskRepository extends JpaRepository<TaskModel, UUID> {
     Page<TaskModel> findAll(Pageable pageable);
 
+    Optional<TaskModel> findByTitle(String title);
+
     @Query("select t from TaskModel t where t.status = :status")
     List<TaskModel> findTasksByStatus(@Param("status") TaskStatus status);
 

@@ -1,16 +1,25 @@
 spring:
   application:
-    name: task-manager-api # Nome da aplicação
+    name: task-manager-api
   datasource:
-    url: jdbc:postgresql://localhost:5433/beehome # URL do banco de dados PostgreSQL
+    url: jdbc:postgresql://localhost:5433/beehome
     driver-class-name: org.postgresql.Driver
-    username: postgres # Substitua pelo seu usuário PostgreSQL
-    password: beehome  # Substitua pela sua senha do PostgreSQL
+    username: postgres
+    password: beehome
   jpa:
     hibernate:
-      ddl-auto: update # Atualiza o esquema do banco automaticamente (não usar em produção)
-    show-sql: true     # Exibe as queries no console
+      ddl-auto: update
+    show-sql: true
 server:
-  port: 8080 # Porta padrão da aplicação
+  port: 8080
   error:
-    include-message: always # Inclui mensagens de erro completas no JSON de erro
+    include-message: always
+spring-doc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha

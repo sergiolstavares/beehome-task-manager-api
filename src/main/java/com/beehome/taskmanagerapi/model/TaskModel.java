@@ -11,22 +11,38 @@ import java.util.UUID;
 public class TaskModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private UUID id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
 
+    @Column(name = "deadline")
     private LocalDateTime deadline;
 
+    @Column(name = "assigned_to")
     private UUID assignedTo;
+
+    public TaskModel() {}
+
+    public TaskModel(String title, String description, TaskStatus status, LocalDateTime createdOn, LocalDateTime deadline, UUID assignedTo) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.createdOn = createdOn;
+        this.deadline = deadline;
+        this.assignedTo = assignedTo;
+    }
 
     public UUID getId() {
         return id;
