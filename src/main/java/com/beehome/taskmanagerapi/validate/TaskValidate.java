@@ -5,8 +5,6 @@ import com.beehome.taskmanagerapi.model.TaskModel;
 import com.beehome.taskmanagerapi.model.TaskStatus;
 import com.beehome.taskmanagerapi.repository.TaskRepository;
 import com.beehome.taskmanagerapi.util.DateUtil;
-import com.beehome.taskmanagerapi.util.TaskStatusUtil;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -36,20 +34,20 @@ public class TaskValidate {
 
     public void listTasksByStatusValidate(String status) {
         if (status == null || status.isEmpty()) {
-            throw new IllegalArgumentException("O status não pode ser vazio");
+            throw new ValidationException("O status não pode ser vazio");
         }
 
         try {
             TaskStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status: " + status + ". Allowed values are: "
+            throw new ValidationException("Invalid status: " + status + ". Allowed values are: "
                     + Arrays.toString(TaskStatus.values()));
         }
     }
 
     public void getTaskByIDValidate(UUID id) {
         if (id == null || id.toString().isEmpty()) {
-            throw new IllegalArgumentException("O indentificador deve ser informado");
+            throw new ValidationException("O indentificador deve ser informado");
         }
     }
 
@@ -66,30 +64,34 @@ public class TaskValidate {
             throw new ValidationException("O status deve ser informado");
         }
 
+        if (taskRequest.getDeadline() == null) {
+            throw new ValidationException("A data limite deve ser informada");
+        }
+
         if (taskRequest.getDeadline().isBefore(DateUtil.generateDateTime())) {
-            throw new IllegalArgumentException("A data de prazo não pode ser no passado.");
+            throw new ValidationException("A data limite não pode ser no passado");
         }
     }
 
     public void validateUpdateTask(UUID id, TaskModel task) {
         if (id == null) {
-            throw new IllegalArgumentException("O indentificador deve ser informado.");
+            throw new ValidationException("O indentificador deve ser informado");
         }
 
         Optional<TaskModel> existingTask = taskRepository.findById(id);
         if (existingTask.isEmpty()) {
-            throw new EntityNotFoundException("Indentificador " + id + " não encontrado.");
+            throw new ValidationException("Indentificador " + id + " não encontrado");
         }
 
         Optional.ofNullable(task.getTitle()).ifPresent(title -> {
             if (title.trim().isEmpty()) {
-                throw new IllegalArgumentException("O título deve ser informado.");
+                throw new ValidationException("O título deve ser informado");
             }
         });
 
         Optional.ofNullable(task.getDescription()).ifPresent(description -> {
             if (description.trim().isEmpty()) {
-                throw new IllegalArgumentException("A descrição deve ser informada.");
+                throw new ValidationException("A descrição deve ser informada");
             }
         });
 
@@ -97,14 +99,14 @@ public class TaskValidate {
             try {
                 TaskStatus.valueOf(status.getDescription().toUpperCase());
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Status inválido: " + status + ". Valores permitidos são: "
+                throw new ValidationException("Status inválido: " + status + ". Valores permitidos são: "
                         + Arrays.toString(TaskStatus.values()));
             }
         });
 
         Optional.ofNullable(task.getDeadline()).ifPresent(deadline -> {
             if (deadline.isBefore(LocalDateTime.now())) {
-                throw new IllegalArgumentException("A data de prazo não pode ser no passado.");
+                throw new ValidationException("A data de prazo não pode ser no passado");
             }
         });
     }
@@ -112,7 +114,7 @@ public class TaskValidate {
     public void validateDeleteTask(UUID id) {
         // Valida se o ID é válido
         if (id == null) {
-            throw new IllegalArgumentException("O ID da tarefa não pode ser nulo.");
+            throw new ValidationException("O ID da tarefa não pode ser nulo");
         }
     }
 

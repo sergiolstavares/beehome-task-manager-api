@@ -4,6 +4,8 @@ import com.beehome.taskmanagerapi.dto.AuthRequest;
 import com.beehome.taskmanagerapi.dto.UserRequest;
 import com.beehome.taskmanagerapi.model.UserModel;
 import com.beehome.taskmanagerapi.repository.UserRepository;
+import com.beehome.taskmanagerapi.util.CryptoUtil;
+import com.beehome.taskmanagerapi.validate.UserValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +17,36 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserValidate userValidate;
+
+    @Autowired
+    CryptoUtil cryptoUtil;
+
     public UserModel createUser(UserRequest user) {
-        UserModel userCreated = new UserModel(user.getUsername(), user.getEmail(), user.getPassword());
+        userValidate.createUserValidate(user);
+
+        String hashedPassword = cryptoUtil.hashPassword(user.getPassword());
+        UserModel userCreated = new UserModel(user.getUsername(), user.getEmail(), hashedPassword);
 
         return userRepository.save(userCreated);
     }
 
-    public Boolean authenticateUser(AuthRequest credentials) {
-        Optional<UserModel> userIsValid = userRepository.findUserByEmailAndPassword(credentials.getEmail(), credentials.getPassword());
+    public Boolean login(AuthRequest credentials) {
+        userValidate.login(credentials);
 
-        return userIsValid.isPresent();
+        Optional<UserModel> userSaved = userRepository.findUserByEmail(credentials.getEmail());
+
+        if (userSaved.isPresent()) {
+            UserModel user = userSaved.get();
+
+            boolean passwordMatches = cryptoUtil.matches(credentials.getPassword(), user.getPassword());
+
+            if (passwordMatches) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
