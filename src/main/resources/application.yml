@@ -23,3 +23,6 @@ spring-doc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+jwt:
+  secret: "k+lD7Op9TcFVxQX7+WT+g3OzP1V3OdR9eFtDT7u7Qc4="
+  expiration: 3600000 # 1 hora

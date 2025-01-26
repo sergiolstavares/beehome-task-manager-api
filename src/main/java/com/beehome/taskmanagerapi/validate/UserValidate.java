@@ -34,14 +34,4 @@ public class UserValidate {
             throw new ValidationException("O email já está em uso");
         }
     }
-
-    public void login(AuthRequest credentials) {
-        if (credentials.getEmail() == null || credentials.getEmail().isEmpty()) {
-            throw new ValidationException("O email deve ser informado");
-        }
-
-        if (credentials.getPassword() == null || credentials.getPassword().isEmpty()) {
-            throw new ValidationException("A senha deve ser informada");
-        }
-    }
 }

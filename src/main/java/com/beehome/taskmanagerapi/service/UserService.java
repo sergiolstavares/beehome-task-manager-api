@@ -31,22 +31,4 @@ public class UserService {
 
         return userRepository.save(userCreated);
     }
-
-    public Boolean login(AuthRequest credentials) {
-        userValidate.login(credentials);
-
-        Optional<UserModel> userSaved = userRepository.findUserByEmail(credentials.getEmail());
-
-        if (userSaved.isPresent()) {
-            UserModel user = userSaved.get();
-
-            boolean passwordMatches = cryptoUtil.matches(credentials.getPassword(), user.getPassword());
-
-            if (passwordMatches) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
