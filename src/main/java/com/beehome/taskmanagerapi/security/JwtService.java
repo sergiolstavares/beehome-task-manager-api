@@ -20,17 +20,6 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(String email) {
-        Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
-    }
-
     public boolean validateToken(String token, String email) {
         String tokenEmail = getEmailFromToken(token);
         return (email.equals(tokenEmail) && !isTokenExpired(token));
@@ -43,14 +32,14 @@ public class JwtService {
 
     public UUID getUserIDFromToken(String token) {
         Claims claims = getClaims(token);
-        String userId = claims.get("id", String.class); // Obtem o ID como String
+        String userId = claims.get("id", String.class);
 
         if (userId == null || userId.isEmpty()) {
             throw new RuntimeException("ID do usuário não está presente ou está inválido no token");
         }
 
         try {
-            return UUID.fromString(userId); // Converte a String para UUID
+            return UUID.fromString(userId);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("ID no token não é um UUID válido", e);
         }

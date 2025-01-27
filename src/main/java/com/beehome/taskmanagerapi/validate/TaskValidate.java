@@ -51,12 +51,12 @@ public class TaskValidate {
         }
     }
 
-    public void createValidate(TaskRequest taskRequest) {
+    public void createValidate(TaskRequest taskRequest, UUID userID) {
         if (taskRequest.getTitle() == null || taskRequest.getTitle().isEmpty()) {
             throw new ValidationException("O titulo deve ser informado");
         }
 
-        if (!isTitleUnique(taskRequest.getTitle())) {
+        if (!isTitleUnique(taskRequest.getTitle(), userID)) {
             throw new ValidationException("O titulo já existe");
         }
 
@@ -112,13 +112,12 @@ public class TaskValidate {
     }
 
     public void validateDeleteTask(UUID id) {
-        // Valida se o ID é válido
         if (id == null) {
             throw new ValidationException("O ID da tarefa não pode ser nulo");
         }
     }
 
-    private boolean isTitleUnique(String title) {
-        return taskRepository.findByTitle(title).isEmpty();
+    private boolean isTitleUnique(String title, UUID userID) {
+        return taskRepository.findByTitleAndAssignedTo(title, userID).isEmpty();
     }
 }

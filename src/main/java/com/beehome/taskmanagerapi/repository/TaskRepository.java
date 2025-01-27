@@ -15,18 +15,13 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskModel, UUID> {
-    Page<TaskModel> findAll(Pageable pageable);
-
     Page<TaskModel> findByAssignedTo(UUID assignedTo, Pageable pageable);
 
-    Optional<TaskModel> findByTitle(String title);
+    @Query("select t from TaskModel t where t.title = :title and t.assignedTo = :user order by t.deadline asc")
+    Optional<TaskModel> findByTitleAndAssignedTo(String title, UUID user);
 
     @Query("select t from TaskModel t where t.status = :status and t.assignedTo = :user order by t.deadline asc")
     List<TaskModel> findTasksByStatus(@Param("status") TaskStatus status, UUID user);
-
-    Optional<TaskModel> findById(UUID uuid);
-
-    TaskModel save(TaskModel task);
 
     @Override
     void deleteById(UUID uuid);

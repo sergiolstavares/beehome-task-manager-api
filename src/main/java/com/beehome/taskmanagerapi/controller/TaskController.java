@@ -72,9 +72,11 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTask(@Valid @RequestBody TaskRequest task) {
+    public ResponseEntity<?> createTask(@Valid @RequestBody TaskRequest task, @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            TaskModel createdTask = taskService.createTask(task);
+            String token = authorizationHeader.replace("Bearer ", "");
+            UUID userId = jwtService.getUserIDFromToken(token);
+            TaskModel createdTask = taskService.createTask(task, userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
         } catch (Exception ex) {
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

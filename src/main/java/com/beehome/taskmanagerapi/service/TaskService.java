@@ -44,8 +44,8 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
-    public TaskModel createTask(TaskRequest task) {
-        taskValidate.createValidate(task);
+    public TaskModel createTask(TaskRequest task, UUID userID) {
+        taskValidate.createValidate(task, userID);
 
         TaskModel taskModel = new TaskModel(
                 task.getTitle(),

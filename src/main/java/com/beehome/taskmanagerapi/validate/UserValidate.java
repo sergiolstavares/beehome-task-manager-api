@@ -1,6 +1,5 @@
 package com.beehome.taskmanagerapi.validate;
 
-import com.beehome.taskmanagerapi.dto.AuthRequest;
 import com.beehome.taskmanagerapi.dto.UserRequest;
 import com.beehome.taskmanagerapi.model.UserModel;
 import com.beehome.taskmanagerapi.repository.UserRepository;

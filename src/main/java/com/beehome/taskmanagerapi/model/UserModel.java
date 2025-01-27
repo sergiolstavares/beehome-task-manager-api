@@ -2,6 +2,7 @@ package com.beehome.taskmanagerapi.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -13,12 +14,15 @@ public class UserModel {
     @Column(name = "id")
     private UUID id;
 
+    @NotNull
     @Column(name = "username")
     private String username;
 
+    @NotNull
     @Column(name = "email")
     private String email;
 
+    @NotNull
     @Column(name = "password")
     private String password;
 

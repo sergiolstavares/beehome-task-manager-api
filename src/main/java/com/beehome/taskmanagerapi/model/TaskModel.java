@@ -1,7 +1,8 @@
 package com.beehome.taskmanagerapi.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,15 +12,20 @@ import java.util.UUID;
 public class TaskModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
+    @NotNull
+    @Size(max = 100)
     @Column(name = "title")
     private String title;
 
+    @NotNull
+    @Size(max = 500)
     @Column(name = "description")
     private String description;
 
+    @NotNull
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
@@ -30,6 +36,7 @@ public class TaskModel {
     @Column(name = "deadline")
     private LocalDateTime deadline;
 
+    @NotNull
     @Column(name = "assigned_to")
     private UUID assignedTo;
 
