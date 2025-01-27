@@ -1,6 +1,6 @@
 # BeehomeTaskManagerApi
 
-API desenvolvida utilizando **Java Spring Boot**. Este projeto oferece funcionalidades para gerenciamento de tarefas, autenticação de usuários via JWT, persistência de dados no banco de dados PostgreSQL e documentação interativa com Swagger.
+API desenvolvida utilizando **Java Spring Boot**. Este projeto oferece funcionalidades para gerenciamento de tarefas, autenticação de usuários via JWT, persistência de dados no banco de dados PostgreSQL, hash de senhas e documentação interativa com Swagger.
 
 ---
 
