@@ -2,10 +2,10 @@ spring:
   application:
     name: task-manager-api
   datasource:
-    url: jdbc:postgresql://localhost:5433/beehome
+    url: jdbc:postgresql://monorail.proxy.rlwy.net:43138/beehome
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: beehome
+    password: QIuYGwjjCGWxhxbmXHVKEwciwWaYsegy
   jpa:
     hibernate:
       ddl-auto: update

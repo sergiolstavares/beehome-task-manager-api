@@ -3,7 +3,9 @@ package com.beehome.taskmanagerapi.controller;
 import com.beehome.taskmanagerapi.dto.TaskRequest;
 import com.beehome.taskmanagerapi.model.TaskModel;
 import com.beehome.taskmanagerapi.model.TaskStatus;
+import com.beehome.taskmanagerapi.security.JwtService;
 import com.beehome.taskmanagerapi.service.TaskService;
+import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +30,19 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @GetMapping
     public ResponseEntity<?> listTasks(
             @Valid
             @PageableDefault(size = 10,
-            sort = "createdOn",
-            direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+            sort = "deadline",
+            direction = org.springframework.data.domain.Sort.Direction.ASC) Pageable pageable, @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            Page response = taskService.listTasks(pageable);
+            String token = authorizationHeader.replace("Bearer ", "");
+            UUID userId = jwtService.getUserIDFromToken(token);
+            Page response = taskService.listTasks(pageable, userId);
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
@@ -42,9 +50,11 @@ public class TaskController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> listTasksByStatus(@RequestParam TaskStatus status) {
+    public ResponseEntity<?> listTasksByStatus(@RequestParam TaskStatus status, @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            List<TaskModel> response = taskService.listTasksByStatus(status);
+            String token = authorizationHeader.replace("Bearer ", "");
+            UUID userId = jwtService.getUserIDFromToken(token);
+            List<TaskModel> response = taskService.listTasksByStatus(status, userId);
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

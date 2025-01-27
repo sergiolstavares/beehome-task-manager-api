@@ -28,7 +28,7 @@ public class AuthService {
     @Autowired
     private CryptoUtil cryptoUtil;
 
-    public String login(AuthRequest credentials) {
+    public Map login(AuthRequest credentials) {
         authValidate.login(credentials);
 
         Optional<UserModel> userOptional = authRepository.findUserByEmail(credentials.getEmail());
@@ -42,7 +42,12 @@ public class AuthService {
                 claims.put("id", user.getId());
                 claims.put("email", user.getEmail());
 
-                return jwtService.generateTokenWithClaims(claims);
+                String token = jwtService.generateTokenWithClaims(claims);
+
+                // Retornar o token como JSON
+                Map<String, String> response = new HashMap<>();
+                response.put("token", token);
+                return response;
             }
         }
 

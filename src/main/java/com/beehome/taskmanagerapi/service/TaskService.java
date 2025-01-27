@@ -26,16 +26,16 @@ public class TaskService {
     @Autowired
     private TaskValidate taskValidate;
 
-    public Page<TaskModel> listTasks(Pageable pageable) {
+    public Page<TaskModel> listTasks(Pageable pageable, UUID user) {
         taskValidate.listTasksValidate(pageable);
 
-        return taskRepository.findAll(pageable);
+        return taskRepository.findByAssignedTo(user, pageable);
     }
 
-    public List<TaskModel> listTasksByStatus(TaskStatus status) {
+    public List<TaskModel> listTasksByStatus(TaskStatus status, UUID user) {
         taskValidate.listTasksByStatusValidate(String.valueOf(status));
 
-        return taskRepository.findTasksByStatus(status);
+        return taskRepository.findTasksByStatus(status, user);
     }
 
     public Optional<TaskModel> getTaskByID(UUID id) {

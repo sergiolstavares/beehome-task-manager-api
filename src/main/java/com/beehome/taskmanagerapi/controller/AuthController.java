@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 import static com.beehome.taskmanagerapi.util.ErrorUtil.createErrorResponse;
 
 @RestController
@@ -21,7 +23,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest credentials) {
         try {
-            String response = authService.login(credentials);
+            Map response = authService.login(credentials);
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -40,6 +41,21 @@ public class JwtService {
         return claims.get("email", String.class);
     }
 
+    public UUID getUserIDFromToken(String token) {
+        Claims claims = getClaims(token);
+        String userId = claims.get("id", String.class); // Obtem o ID como String
+
+        if (userId == null || userId.isEmpty()) {
+            throw new RuntimeException("ID do usuário não está presente ou está inválido no token");
+        }
+
+        try {
+            return UUID.fromString(userId); // Converte a String para UUID
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("ID no token não é um UUID válido", e);
+        }
+    }
+
     private boolean isTokenExpired(String token) {
         return getClaims(token).getExpiration().before(new Date());
     }
@@ -59,5 +75,4 @@ public class JwtService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
-
 }
