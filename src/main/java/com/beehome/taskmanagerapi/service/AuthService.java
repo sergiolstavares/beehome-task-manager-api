@@ -44,7 +44,6 @@ public class AuthService {
 
                 String token = jwtService.generateTokenWithClaims(claims);
 
-                // Retornar o token como JSON
                 Map<String, String> response = new HashMap<>();
                 response.put("token", token);
                 return response;
