@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,9 +74,7 @@ public class TaskValidate {
                 .atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
                 .toLocalDate()
-                .isBefore(DateUtil.generateDateTime()
-                        .atZone(ZoneId.of("America/Sao_Paulo"))
-                        .toLocalDate())
+                .isBefore(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toLocalDate())
         ) {
             throw new ValidationException("A data limite não pode ser no passado");
         }
