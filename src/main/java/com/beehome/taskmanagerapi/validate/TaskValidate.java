@@ -68,7 +68,7 @@ public class TaskValidate {
             throw new ValidationException("A data limite deve ser informada");
         }
 
-        if (taskRequest.getDeadline().isBefore(DateUtil.generateDateTime())) {
+        if (taskRequest.getDeadline().toLocalDate().isBefore(DateUtil.generateDateTime().toLocalDate())) {
             throw new ValidationException("A data limite não pode ser no passado");
         }
     }
