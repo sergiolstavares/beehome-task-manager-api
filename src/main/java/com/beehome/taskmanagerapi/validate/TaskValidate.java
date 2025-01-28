@@ -80,7 +80,7 @@ public class TaskValidate {
         }
     }
 
-    public void validateUpdateTask(UUID id, TaskModel task) {
+    public void updateTaskValidate(UUID id, TaskModel task) {
         if (id == null) {
             throw new ValidationException("O indentificador deve ser informado");
         }
@@ -122,7 +122,7 @@ public class TaskValidate {
         });
     }
 
-    public void validateDeleteTask(UUID id) {
+    public void deleteTaskValidate(UUID id) {
         if (id == null) {
             throw new ValidationException("O ID da tarefa não pode ser nulo");
         }

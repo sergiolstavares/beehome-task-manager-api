@@ -59,7 +59,7 @@ public class TaskService {
     }
 
     public TaskModel updateTask(UUID id, TaskModel task) {
-        taskValidate.validateUpdateTask(id, task);
+        taskValidate.updateTaskValidate(id, task);
         Optional<TaskModel> existingTask = taskRepository.findById(id);
 
         if (existingTask.isPresent()) {
@@ -78,7 +78,7 @@ public class TaskService {
     }
 
     public void deleteTask(UUID id) {
-        taskValidate.validateDeleteTask(id);
+        taskValidate.deleteTaskValidate(id);
         taskRepository.deleteById(id);
     }
 }
