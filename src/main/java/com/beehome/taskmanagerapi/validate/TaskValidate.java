@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,7 +69,11 @@ public class TaskValidate {
             throw new ValidationException("A data limite deve ser informada");
         }
 
-        if (taskRequest.getDeadline().toLocalDate().isBefore(DateUtil.generateDateTime().toLocalDate())) {
+        if (taskRequest.getDeadline().toLocalDate()
+                .isBefore(DateUtil.generateDateTime()
+                        .atZone(ZoneId.of("America/Sao_Paulo"))
+                        .toLocalDate())
+        ) {
             throw new ValidationException("A data limite não pode ser no passado");
         }
     }
