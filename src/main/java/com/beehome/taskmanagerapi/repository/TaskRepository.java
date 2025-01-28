@@ -20,6 +20,9 @@ public interface TaskRepository extends JpaRepository<TaskModel, UUID> {
     @Query("select t from TaskModel t where t.title = :title and t.assignedTo = :user order by t.deadline asc")
     Optional<TaskModel> findByTitleAndAssignedTo(String title, UUID user);
 
+    @Query("SELECT t FROM TaskModel t WHERE t.title = :title AND t.assignedTo = :userId AND t.id <> :currentTaskId")
+    Optional<TaskModel> findByTitleAndUserIdExcludingCurrent(@Param("title") String title, @Param("userId") UUID userId, @Param("currentTaskId") UUID currentTaskId);
+
     @Query("select t from TaskModel t where t.status = :status and t.assignedTo = :user order by t.deadline asc")
     List<TaskModel> findTasksByStatus(@Param("status") TaskStatus status, UUID user);
 

@@ -95,8 +95,8 @@ public class TaskValidate {
                 throw new ValidationException("O título deve ser informado");
             }
 
-            if (!id.equals(task.getId()) && !isTitleUnique(title.trim(), userID)) {
-                throw new ValidationException("O titulo já existe");
+            if (isTitleDuplicateForOtherTasks(title.trim(), userID, id)) {
+                throw new ValidationException("O título já existe em outra tarefa.");
             }
         });
 
@@ -134,5 +134,9 @@ public class TaskValidate {
 
     private boolean isTitleUnique(String title, UUID userID) {
         return taskRepository.findByTitleAndAssignedTo(title, userID).isEmpty();
+    }
+
+    private boolean isTitleDuplicateForOtherTasks(String title, UUID userID, UUID currentTaskId) {
+        return taskRepository.findByTitleAndUserIdExcludingCurrent(title, userID, currentTaskId).isPresent();
     }
 }
