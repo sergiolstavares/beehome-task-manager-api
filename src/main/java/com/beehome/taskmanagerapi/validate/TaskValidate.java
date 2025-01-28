@@ -69,7 +69,10 @@ public class TaskValidate {
             throw new ValidationException("A data limite deve ser informada");
         }
 
-        if (taskRequest.getDeadline().toLocalDate()
+        if (taskRequest.getDeadline()
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
+                .toLocalDate()
                 .isBefore(DateUtil.generateDateTime()
                         .atZone(ZoneId.of("America/Sao_Paulo"))
                         .toLocalDate())
