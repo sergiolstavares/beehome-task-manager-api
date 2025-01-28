@@ -80,7 +80,7 @@ public class TaskValidate {
         }
     }
 
-    public void updateTaskValidate(UUID id, TaskModel task) {
+    public void updateTaskValidate(UUID id, TaskModel task, UUID userID) {
         if (id == null) {
             throw new ValidationException("O indentificador deve ser informado");
         }
@@ -93,6 +93,10 @@ public class TaskValidate {
         Optional.ofNullable(task.getTitle()).ifPresent(title -> {
             if (title.trim().isEmpty()) {
                 throw new ValidationException("O título deve ser informado");
+            }
+
+            if (!isTitleUnique(title.trim(), userID)) {
+                throw new ValidationException("O titulo já existe");
             }
         });
 

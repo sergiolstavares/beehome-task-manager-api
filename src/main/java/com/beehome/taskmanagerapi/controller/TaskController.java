@@ -84,9 +84,11 @@ public class TaskController {
     }
 
     @PutMapping("/{id:[0-9a-fA-F\\\\-]{36}}")
-    public ResponseEntity<?> updateTask(@PathVariable UUID id, @RequestBody TaskModel task) {
+    public ResponseEntity<?> updateTask(@PathVariable UUID id, @RequestBody TaskModel task, @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            TaskModel updatedTask = taskService.updateTask(id, task);
+            String token = authorizationHeader.replace("Bearer ", "");
+            UUID userId = jwtService.getUserIDFromToken(token);
+            TaskModel updatedTask = taskService.updateTask(id, task, userId);
             return ResponseEntity.ok(updatedTask);
         } catch (Exception ex) {
             return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

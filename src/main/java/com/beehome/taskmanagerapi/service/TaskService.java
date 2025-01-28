@@ -58,8 +58,8 @@ public class TaskService {
         return taskRepository.save(taskModel);
     }
 
-    public TaskModel updateTask(UUID id, TaskModel task) {
-        taskValidate.updateTaskValidate(id, task);
+    public TaskModel updateTask(UUID id, TaskModel task, UUID userID) {
+        taskValidate.updateTaskValidate(id, task, userID);
         Optional<TaskModel> existingTask = taskRepository.findById(id);
 
         if (existingTask.isPresent()) {
