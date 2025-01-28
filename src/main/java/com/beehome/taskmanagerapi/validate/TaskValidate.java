@@ -95,7 +95,7 @@ public class TaskValidate {
                 throw new ValidationException("O título deve ser informado");
             }
 
-            if (!isTitleUnique(title.trim(), userID)) {
+            if (id != task.getId() && !isTitleUnique(title.trim(), userID)) {
                 throw new ValidationException("O titulo já existe");
             }
         });
