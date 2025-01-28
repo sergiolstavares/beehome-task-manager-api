@@ -112,7 +112,11 @@ public class TaskValidate {
         });
 
         Optional.ofNullable(task.getDeadline()).ifPresent(deadline -> {
-            if (deadline.isBefore(LocalDateTime.now())) {
+            if (deadline
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
+                    .toLocalDate()
+                    .isBefore(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toLocalDate())) {
                 throw new ValidationException("A data de prazo não pode ser no passado");
             }
         });
